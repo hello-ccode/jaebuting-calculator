@@ -205,15 +205,16 @@
   .input-wrap input:focus-visible {
     outline: none; border-color: var(--blue); box-shadow: var(--focus-ring); background: #FFFFFF;
   }
-  .input-wrap input[type="number"]::-webkit-outer-spin-button,
-  .input-wrap input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-  .input-wrap input[type="number"] { -moz-appearance: textfield; }
+  .input-wrap input[type="text"]::-webkit-outer-spin-button,
+  .input-wrap input[type="text"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .input-wrap input[type="text"] { -moz-appearance: textfield; }
   .input-wrap .unit {
     position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
     color: #ABAFB9; font-size: 0.875rem; pointer-events: none;
   }
 
   .hint { margin: 0; font-size: 0.75rem; color: var(--muted); }
+  .hint-warn { color: var(--coral-text); font-weight: 700; }
 
   /* ---------- Result band (dark, brand "conclusion" band) ---------- */
   .result-band {
@@ -342,8 +343,16 @@
   .example-box {
     margin-top: 10px; background: var(--tint); border-radius: var(--radius-md);
     padding: 12px 14px; font-size: 0.875rem; line-height: 1.8; color: #33363D;
+    cursor: pointer; position: relative;
   }
+  .example-box:hover { background: #ECEFF6; }
+  .example-box:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+  .example-box.dismissed { display: none; }
   .example-box .arrow { color: var(--blue); font-weight: 700; }
+  .example-box-close {
+    display: block; text-align: right; font-size: 0.75rem; font-weight: 700;
+    color: var(--muted); margin-bottom: 6px;
+  }
   .modal-steps { margin: 8px 0 0; padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
   .modal-steps li {
     display: flex; gap: 10px; font-size: 0.9375rem; line-height: 1.6; color: var(--ink);
@@ -385,7 +394,7 @@
       <p class="cover-lede">주식을 더 사면 <b>평단가</b>(1주당 평균 가격)가 얼마로 바뀌는지, 얼마를 더 사야 원하는 가격까지 낮출 수 있는지 바로 계산해드려요.</p>
       <p class="cover-quote">"감으로 사지 말고, 숫자로 확인해요"</p>
       <button type="button" class="help-btn" id="helpOpenBtn">📖 처음이라면? 사용설명서 보기</button>
-      <p class="cover-byline">재부띵 장세미</p>
+      <p class="cover-byline">재부띵</p>
     </div>
     <img class="cover-mascot" id="coverMascot" alt="재부띵 마스코트가 성장 그래프를 가리키고 있어요" src="">
   </div>
@@ -407,14 +416,14 @@
           <div class="field">
             <label for="ownedQty">보유 수량</label>
             <div class="input-wrap">
-              <input type="number" id="ownedQty" min="0" step="1" inputmode="numeric" placeholder="100">
+              <input type="text" id="ownedQty" min="0" step="1" inputmode="numeric" placeholder="100">
               <span class="unit">주</span>
             </div>
           </div>
           <div class="field">
             <label for="ownedAvg">보유 평단가</label>
             <div class="input-wrap">
-              <input type="number" id="ownedAvg" min="0" step="1" inputmode="decimal" placeholder="50000">
+              <input type="text" id="ownedAvg" min="0" step="1" inputmode="decimal" placeholder="50000">
               <span class="unit">원</span>
             </div>
           </div>
@@ -434,14 +443,14 @@
           <div class="field" id="addQtyField">
             <label for="addQty">추가 매수 수량</label>
             <div class="input-wrap">
-              <input type="number" id="addQty" min="0" step="1" inputmode="numeric" placeholder="50">
+              <input type="text" id="addQty" min="0" step="1" inputmode="numeric" placeholder="50">
               <span class="unit">주</span>
             </div>
           </div>
           <div class="field" id="addAmountField" hidden>
             <label for="addAmount">추가 매수 금액</label>
             <div class="input-wrap">
-              <input type="number" id="addAmount" min="0" step="1" inputmode="decimal" placeholder="1000000">
+              <input type="text" id="addAmount" min="0" step="1" inputmode="decimal" placeholder="1000000">
               <span class="unit">원</span>
             </div>
             <p class="hint" id="addAmountHint"></p>
@@ -449,7 +458,7 @@
           <div class="field">
             <label for="addPrice">추가 매수 단가</label>
             <div class="input-wrap">
-              <input type="number" id="addPrice" min="0" step="1" inputmode="decimal" placeholder="40000">
+              <input type="text" id="addPrice" min="0" step="1" inputmode="decimal" placeholder="40000">
               <span class="unit">원</span>
             </div>
           </div>
@@ -463,7 +472,7 @@
           <div class="field">
             <label for="currentPrice">현재가</label>
             <div class="input-wrap">
-              <input type="number" id="currentPrice" min="0" step="1" inputmode="decimal" placeholder="45000">
+              <input type="text" id="currentPrice" min="0" step="1" inputmode="decimal" placeholder="45000">
               <span class="unit">원</span>
             </div>
           </div>
@@ -520,14 +529,14 @@
           <div class="field">
             <label for="rOwnedQty">보유 수량</label>
             <div class="input-wrap">
-              <input type="number" id="rOwnedQty" min="0" step="1" inputmode="numeric" placeholder="100">
+              <input type="text" id="rOwnedQty" min="0" step="1" inputmode="numeric" placeholder="100">
               <span class="unit">주</span>
             </div>
           </div>
           <div class="field">
             <label for="rOwnedAvg">보유 평단가</label>
             <div class="input-wrap">
-              <input type="number" id="rOwnedAvg" min="0" step="1" inputmode="decimal" placeholder="50000">
+              <input type="text" id="rOwnedAvg" min="0" step="1" inputmode="decimal" placeholder="50000">
               <span class="unit">원</span>
             </div>
           </div>
@@ -540,14 +549,14 @@
           <div class="field">
             <label for="targetAvg">목표 평단가</label>
             <div class="input-wrap">
-              <input type="number" id="targetAvg" min="0" step="1" inputmode="decimal" placeholder="45000">
+              <input type="text" id="targetAvg" min="0" step="1" inputmode="decimal" placeholder="45000">
               <span class="unit">원</span>
             </div>
           </div>
           <div class="field">
             <label for="rAddPrice">추가 매수 단가</label>
             <div class="input-wrap">
-              <input type="number" id="rAddPrice" min="0" step="1" inputmode="decimal" placeholder="40000">
+              <input type="text" id="rAddPrice" min="0" step="1" inputmode="decimal" placeholder="40000">
               <span class="unit">원</span>
             </div>
           </div>
@@ -592,9 +601,9 @@
   <div class="closing-inner">
     <img class="closing-mascot" alt="재부띵 마스코트" src="">
     <div class="closing-text">
-      <p class="closing-disclaimer">이 계산기는 매수 단가와 손익 구조를 편하게 이해해보시라고 만든 참고용 도구예요. 투자 조언은 아니고, 세금·수수료·슬리피지도 반영되지 않았어요. 실제 매수·매도는 꼭 본인의 판단과 책임 아래 진행해주세요.</p>
-      <p class="closing-quote">"여러분이 스스로를 못 믿겠다면, 여러분을 믿는 저를 믿으세요."</p>
-      <p class="closing-byline">재부띵 장세미</p>
+      <p class="closing-disclaimer">이 계산기는 매수 단가와 손익 구조를 편하게 이해해보시라고 만든 참고용 도구예요. 투자 조언은 아니고, 세금이나 수수료, 실제 체결가와의 차이는 반영되지 않았어요. 실제 매수·매도는 꼭 본인의 판단과 책임 아래 진행해주세요.</p>
+      <p class="closing-quote">"사고, 기다리고, 잃고, 배우고 — 그 모든 과정을 지나야 비로소 투자자가 됩니다."</p>
+      <p class="closing-byline">재부띵</p>
     </div>
   </div>
 </footer>
@@ -611,7 +620,8 @@
       <div class="modal-section">
         <h3>🌱 물타기가 뭔가요?</h3>
         <p>주가가 떨어졌을 때 조금 더 사서, 1주당 평균 가격인 <b>평단가</b>를 낮추는 방법이에요.</p>
-        <div class="example-box">
+        <div class="example-box" id="exampleBox" tabindex="0" role="button" aria-label="예시 닫기">
+          <span class="example-box-close">✕ 눌러서 닫기</span>
           10만원에 10주를 샀어요 → 평단가 10만원<br>
           주가가 8만원으로 떨어져서 10주를 더 샀어요 → <span class="arrow">평단가 9만원</span><br>
           평단가가 10만원에서 9만원으로 낮아졌죠? 이러면 주가가 조금만 올라도 본전을 찾기 쉬워져요.
@@ -696,7 +706,7 @@
     }
     function val(id) {
       var el = document.getElementById(id);
-      var v = parseFloat(el.value);
+      var v = parseFloat((el.value || '').replace(/,/g, ''));
       return Number.isFinite(v) ? v : NaN;
     }
     function setText(id, text) { document.getElementById(id).textContent = text; }
@@ -705,6 +715,29 @@
       var src = MASCOT[key];
       if (img.src !== src) img.src = src;
     }
+
+    // ---- Thousands-separator formatting on number-ish text inputs ----
+    function formatThousands(str) {
+      var digits = (str || '').replace(/[^0-9]/g, '').replace(/^0+(?=\d)/, '');
+      if (!digits) return '';
+      return parseInt(digits, 10).toLocaleString('ko-KR');
+    }
+    function attachThousandsFormatting(id) {
+      var el = document.getElementById(id);
+      el.addEventListener('input', function () {
+        var start = el.selectionStart == null ? el.value.length : el.selectionStart;
+        var digitsBeforeCursor = (el.value.slice(0, start).match(/[0-9]/g) || []).length;
+        el.value = formatThousands(el.value);
+        var pos = el.value.length, count = 0;
+        for (var i = 0; i < el.value.length; i++) {
+          if (count === digitsBeforeCursor) { pos = i; break; }
+          if (/[0-9]/.test(el.value[i])) count++;
+        }
+        el.setSelectionRange(pos, pos);
+      });
+    }
+    ['ownedQty', 'ownedAvg', 'addQty', 'addAmount', 'addPrice', 'currentPrice',
+      'rOwnedQty', 'rOwnedAvg', 'targetAvg', 'rAddPrice'].forEach(attachThousandsFormatting);
 
     // ---- Help modal ----
     var helpOverlay = document.getElementById('helpOverlay');
@@ -732,6 +765,17 @@
     });
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && !helpOverlay.hidden) closeHelp();
+    });
+
+    var exampleBox = document.getElementById('exampleBox');
+    exampleBox.addEventListener('click', function () {
+      exampleBox.classList.add('dismissed');
+    });
+    exampleBox.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        exampleBox.classList.add('dismissed');
+      }
     });
 
     // ---- Tabs ----
@@ -796,17 +840,26 @@
       var addPrice = val('addPrice');
       var addQty;
 
+      var addAmountHintEl = document.getElementById('addAmountHint');
       if (addMode === 'qty') {
         addQty = val('addQty');
-        setText('addAmountHint', '');
+        addAmountHintEl.textContent = '';
+        addAmountHintEl.classList.remove('hint-warn');
       } else {
         var addAmount = val('addAmount');
         if (Number.isFinite(addAmount) && Number.isFinite(addPrice) && addPrice > 0) {
           addQty = Math.floor(addAmount / addPrice);
-          setText('addAmountHint', '약 ' + qtyFmt(addQty) + ' 매수 가능 (' + won(addQty * addPrice) + ')');
+          if (addQty === 0 && addAmount > 0) {
+            addAmountHintEl.textContent = '앗, 이 금액으로는 1주도 살 수 없어요. 1주 가격이 ' + won(addPrice) + '이니, 그 이상 넣어주세요.';
+            addAmountHintEl.classList.add('hint-warn');
+          } else {
+            addAmountHintEl.textContent = '약 ' + qtyFmt(addQty) + ' 매수 가능 (' + won(addQty * addPrice) + ')';
+            addAmountHintEl.classList.remove('hint-warn');
+          }
         } else {
           addQty = NaN;
-          setText('addAmountHint', '');
+          addAmountHintEl.textContent = '';
+          addAmountHintEl.classList.remove('hint-warn');
         }
       }
 
